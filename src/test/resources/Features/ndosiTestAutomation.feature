@@ -1,19 +1,13 @@
 Feature: Ndosi Mobile Test Automation
 
-  # ------------------------
-  # Open Ndosi Test Automation site on android
-  # ------------------------
   Scenario: Launch Ndosi website on Android Chrome
     Given The Android device launches Chrome browser
     When I navigate to the Ndosi homepage
-    Then The heading "Learn Automation the Right Way" should be visible
+    Then I should see the heading Learn Automation the Right Way displayed
     When I click on the OpenMenu option
     And I tap on the Learning Material tab
     Then The heading "Login to Access Learning Materials" should be displayed
 
-  # ------------------------
-  # Login & Session
-  # ------------------------
   Scenario: Valid login using database user id 25
     Given I fetch login details for user id 25
     When I click the login button with those credentials
@@ -41,9 +35,6 @@ Feature: Ndosi Mobile Test Automation
     Then The "authToken" should be removed from localStorage
     And The login screen should be visible
 
-  # ------------------------
-  # Registration
-  # ------------------------
   Scenario: Registration attempt with mismatched passwords
     Given I open the registration form for a new user
     When I provide two different passwords
@@ -65,9 +56,6 @@ Feature: Ndosi Mobile Test Automation
     Then A message "Registration successful" should be displayed
     And The login form should appear with the email pre-filled
 
-  # ------------------------
-  # Wizard Step 1 Validation
-  # ------------------------
   Scenario: Step 1 fails when device is not selected
     Given I am on Step 1 of the wizard
     When I leave device type unselected and press Next
@@ -98,9 +86,6 @@ Feature: Ndosi Mobile Test Automation
     When I press Next
     Then I should be navigated to Step 2 of the wizard
 
-  # ------------------------
-  # Pricing & Cart
-  # ------------------------
   Scenario: Pricing calculation for Phone 64GB Qty1
     Given I configure a Phone with 64GB storage and quantity 1
     Then The unit price should display "$400.00" on the screen
@@ -126,9 +111,6 @@ Feature: Ndosi Mobile Test Automation
     When I remove every item from the cart
     Then The cart panel should disappear completely
 
-  # ------------------------
-  # Review Cart & Place Order
-  # ------------------------
   Scenario: Place order successfully from review cart
     Given I have at least one item available in the cart
     When I click Review Cart Order and then Place Order
@@ -141,18 +123,12 @@ Feature: Ndosi Mobile Test Automation
     Then Only one success toast should appear
     And The cart should clear just once
 
-  # ------------------------
-  # Confirm Purchase (Single Item)
-  # ------------------------
   Scenario: Confirm purchase of a single item
     Given I configure one valid device
     When I press the Confirm Purchase button
     Then I should see a toast showing "Total:"
     And The wizard should reset back to Step 1
 
-  # ------------------------
-  # Edge & Accessibility
-  # ------------------------
   Scenario: Apply invalid discount code
     Given I type a discount code "random"
     When I click the Apply button

@@ -6,6 +6,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 
 public class AppiumDriverFactory {
 
@@ -16,18 +17,19 @@ public class AppiumDriverFactory {
     public AppiumDriverFactory() {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
+
         capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("automationName", "UiAutomator2");
-        capabilities.setCapability("appPackage", "com.android.chrome");
-//        capabilities.setCapability("app", path);
-        capabilities.setCapability("noReset", true);
+        capabilities.setCapability("appium:automationName", "UiAutomator2");
+        capabilities.setCapability("appium:appPackage", "com.android.chrome");
+        capabilities.setCapability("appium:noReset", true);
 
         try {
             driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), capabilities);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(15));
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     public static void getInstanceOfAppiumDriverFactory() throws MalformedURLException {
@@ -39,6 +41,4 @@ public class AppiumDriverFactory {
     public static AndroidDriver getDriver() {
         return (AndroidDriver) driver;
     }
-
-
 }
