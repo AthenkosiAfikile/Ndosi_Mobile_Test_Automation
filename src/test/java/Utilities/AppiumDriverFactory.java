@@ -20,7 +20,7 @@ public class AppiumDriverFactory {
 
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("appium:automationName", "UiAutomator2");
-        capabilities.setCapability("appium:appPackage", "com.android.chrome");
+        capabilities.setCapability("appium:appActivity", "com.google.android.apps.chrome.Main");
         capabilities.setCapability("appium:noReset", true);
 
         try {

@@ -1,6 +1,7 @@
 package StepDef;
 
 import Screens.HomeScreen;
+import Screens.LeaningMaterialScreen;
 import Utilities.AppiumDriverFactory;
 import io.appium.java_client.android.AndroidDriver;
 import io.cucumber.java.en.*;
@@ -10,6 +11,7 @@ import java.net.MalformedURLException;
 public class StepDefinition {
 
     HomeScreen homeScreen;
+    LeaningMaterialScreen leaningMaterialScreen;
 
     @Given("The Android device launches Chrome browser")
     public void the_android_device_launches_chrome_browser() throws MalformedURLException {
@@ -35,12 +37,14 @@ public class StepDefinition {
 
     @And("I tap on the Learning Material tab")
     public void i_tap_on_the_learning_material_tab() {
-//        homeScreen.clickOnLearningMaterialTab();
+        homeScreen.clickOnLearningMaterialTab();
+        this.leaningMaterialScreen = new LeaningMaterialScreen(AppiumDriverFactory.getDriver());
+
     }
 
     @Then("The heading {string} should be displayed")
-    public void the_heading_should_be_displayed(String string) {
-
+    public void the_heading_should_be_displayed(String expectedHeading) {
+        leaningMaterialScreen.verifyLearningMaterialScreenDisplayed(expectedHeading);
     }
 
 

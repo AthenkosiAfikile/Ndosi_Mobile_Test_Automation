@@ -17,7 +17,7 @@ public class HomeScreen extends Roots_Elements {
     @FindBy(xpath = "//android.widget.Button[@resource-id=\"nav-burger\"]")
     WebElement buttonOpenMenu;
 
-    @FindBy(xpath = "//android.view.View[@resource-id=\"root\"]/android.view.View[2]/android.widget.TextView[11]")
+    @FindBy(xpath = "//android.widget.ToggleButton[@text='Learning Materials']")
     WebElement headingLoginToAccessLearningMaterials;
 
     public HomeScreen(AndroidDriver driver) {
