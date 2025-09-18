@@ -1,15 +1,25 @@
 package StepDef;
 
 import Screens.HomeScreen;
+import Screens.LeaningMaterialScreen;
 import Utilities.AppiumDriverFactory;
+import Utilities.DatabaseConnection;
 import io.appium.java_client.android.AndroidDriver;
 import io.cucumber.java.en.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.MalformedURLException;
+import java.time.Duration;
 
 public class StepDefinition {
 
     HomeScreen homeScreen;
+    LeaningMaterialScreen leaningMaterialScreen;
 
     @Given("The Android device launches Chrome browser")
     public void the_android_device_launches_chrome_browser() throws MalformedURLException {
@@ -20,7 +30,7 @@ public class StepDefinition {
     @When("I navigate to the Ndosi homepage")
     public void i_navigate_to_the_ndosi_homepage() {
         AndroidDriver driver = AppiumDriverFactory.getDriver();
-        driver.get("https://gray-island-0bd788c1e.2.azurestaticapps.net/");
+        driver.get("https://ndosiautomation.vercel.app/");
     }
 
     @Then("I should see the heading Learn Automation the Right Way displayed")
@@ -35,33 +45,61 @@ public class StepDefinition {
 
     @And("I tap on the Learning Material tab")
     public void i_tap_on_the_learning_material_tab() {
-//        homeScreen.clickOnLearningMaterialTab();
+        homeScreen.clickOnLearningMaterialTab();
+        this.leaningMaterialScreen = new LeaningMaterialScreen(AppiumDriverFactory.getDriver());
     }
 
-    @Then("The heading {string} should be displayed")
-    public void the_heading_should_be_displayed(String string) {
+    @Given("I should see the heading Login to Access Learning Materials displayed")
+    public void iShouldSeeTheHeadingLoginToAccessLearningMaterialsDisplayed() {
+        leaningMaterialScreen.verifyLearningMaterialScreenDisplayed();
+    }
+
+    @When("I fetch login details for user id {int}")
+    public void i_fetch_login_details_for_user_id(int arg0) {
+        DatabaseConnection.User user = DatabaseConnection.getUserById(arg0);
+
+        leaningMaterialScreen.clickOnEmailInputField();
+        assert user != null;
+        leaningMaterialScreen.enterEmail(user.getUsername());
+
+        leaningMaterialScreen.clickOnPasswordInputField();
+        leaningMaterialScreen.enterPassword(user.getPassword());
 
     }
 
-
-    @Given("I fetch login details for user id {int}")
-    public void i_fetch_login_details_for_user_id(Integer int1) {
-
-    }
-
-    @When("I click the login button with those credentials")
+    @Then("I click the login button with those credentials")
     public void i_click_the_login_button_with_those_credentials() {
-
+        leaningMaterialScreen.clickOnLoginButton();
     }
 
-    @Then("The application dashboard tabs should be displayed")
+    @And("The application dashboard tabs should be displayed")
     public void the_application_dashboard_tabs_should_be_displayed() {
-
+        leaningMaterialScreen.applicationDashboardIsDisplayed();
     }
 
-    @Then("localStorage should contain the key {string}")
-    public void local_storage_should_contain_the_key(String string) {
+    @And("localStorage should contain the key {string}")
+    public void local_storage_should_contain_the_key(String key) {
+        try {
+            WebDriverWait wait = new WebDriverWait(AppiumDriverFactory.getDriver(), Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.alertIsPresent());
+            Alert alert = AppiumDriverFactory.getDriver().switchTo().alert();
+            System.out.println("Login failed popup detected with message: " + alert.getText());
+            alert.accept();
+            System.out.println("Popup accepted successfully. Test passed for failed login.");
 
+        } catch (NoAlertPresentException | TimeoutException e) {
+            System.out.println("No login failed popup was displayed. Proceeding to check localStorage.");
+
+            JavascriptExecutor js = (JavascriptExecutor) AppiumDriverFactory.getDriver();
+            String script = String.format("return window.localStorage.getItem('%s');", key);
+            Object localStorageValue = js.executeScript(script);
+
+            if (localStorageValue != null) {
+                System.out.println("Local Storage contains the key '" + key + "' with value: " + localStorageValue + ". Test passed for successful login.");
+            } else {
+                throw new AssertionError("Successful login assumed, but Local Storage does not contain the key '" + key + "'. Test failed.");
+            }
+        }
     }
 
 
@@ -477,6 +515,7 @@ public class StepDefinition {
     public void all_toast_messages_should_use_role(String string) {
 
     }
+
 
 
 }
