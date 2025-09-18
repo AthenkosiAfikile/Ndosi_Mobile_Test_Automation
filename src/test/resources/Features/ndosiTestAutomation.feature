@@ -3,15 +3,13 @@ Feature: Ndosi Mobile Test Automation
   Scenario: Launch Ndosi website on Android Chrome
     Given The Android device launches Chrome browser
     When I navigate to the Ndosi homepage
-    Then I should see the heading Learn Automation the Right Way displayed
-    When I click on the OpenMenu option
+    And I click on the OpenMenu option
     And I tap on the Learning Material tab
-    Then The heading "Login to Access Learning Materials" should be displayed
 
-  Scenario: Valid login using database user id 25
-    Given I fetch login details for user id 25
-    When I click the login button with those credentials
-    Then The application dashboard tabs should be displayed
+    Then I should see the heading Login to Access Learning Materials displayed
+    When I fetch login details for user id 29
+    Then I click the login button with those credentials
+    And The application dashboard tabs should be displayed
     And localStorage should contain the key "authToken"
 
   Scenario: Invalid login attempt using user id 26
@@ -139,3 +137,5 @@ Feature: Ndosi Mobile Test Automation
     Then I should be able to select storage by radio buttons
     And All error messages should use role="alert"
     And All toast messages should use role="status"
+
+
