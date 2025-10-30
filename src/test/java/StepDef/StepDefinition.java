@@ -30,7 +30,7 @@ public class StepDefinition {
     @When("I navigate to the Ndosi homepage")
     public void i_navigate_to_the_ndosi_homepage() {
         AndroidDriver driver = AppiumDriverFactory.getDriver();
-        driver.get("https://ndosiautomation.vercel.app/");
+        driver.get("https://www.ndosiautomation.co.za/");
     }
 
     @Then("I should see the heading Learn Automation the Right Way displayed")
